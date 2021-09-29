@@ -6,6 +6,7 @@
   "env": {
     "commonjs": true,
     "es6": true,
+    "jest/globals": true,
     "node": true
   },
   "parserOptions": {
