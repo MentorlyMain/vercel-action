@@ -292,6 +292,7 @@ async function aliasDomainsToDeployment(deploymentUrl) {
     core.info('using scope');
     args.push('--scope', vercelScope);
   }
+  core.info('ignoring errors');
   const promises = aliasDomains.map(domain => {
     return exec.exec('npx', [
       'vercel',
@@ -299,7 +300,7 @@ async function aliasDomainsToDeployment(deploymentUrl) {
       'alias',
       deploymentUrl,
       domain,
-    ]);
+    ], {ignoreReturnCode: true});
   });
   await Promise.all(promises);
 }
