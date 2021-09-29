@@ -3,6 +3,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const { execSync } = require('child_process');
 const exec = require('@actions/exec');
+const { joinDeploymentUrls, slugify } = require('./lib');
 
 function getGithubCommentInput() {
   const input = core.getInput('github-comment');
@@ -22,20 +23,6 @@ const branchRegExp = /{{\s*BRANCH\s*}}/g;
 
 function isPullRequestType(event) {
   return event.startsWith('pull_request');
-}
-
-function slugify(str) {
-  const slug = str
-    .toString()
-    .trim()
-    .toLowerCase()
-    .replace(/[_\s]+/g, '-')
-    .replace(/[^\w-]+/g, '')
-    .replace(/--+/g, '-')
-    .replace(/^-+/, '')
-    .replace(/-+$/, '');
-  core.debug(`before slugify: "${str}"; after slugify: "${slug}"`);
-  return slug;
 }
 
 // Vercel
@@ -204,14 +191,6 @@ async function findPreviousComment(text) {
   }
   core.info('previous comment not found');
   return null;
-}
-
-function joinDeploymentUrls(deploymentUrl, aliasDomains_) {
-  if (aliasDomains_.length) {
-    const aliasUrls = aliasDomains_.map(domain => `https://${domain}`);
-    return [deploymentUrl, ...aliasUrls].join('\n');
-  }
-  return deploymentUrl;
 }
 
 function buildCommentPrefix(deploymentName) {
