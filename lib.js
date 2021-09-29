@@ -6,7 +6,7 @@ function joinDeploymentUrls(deploymentUrl, aliasDomains) {
   let urls = [deploymentUrl]
   if (aliasDomains.length) {
     const aliasUrls = aliasDomains.map(domainToUrl);
-    urls = [deploymentUrl, ...aliasUrls];
+    urls = [...aliasUrls];
   }
   return urls.map(url => `<${url}>`).join('\n');
 }
